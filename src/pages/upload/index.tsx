@@ -5,7 +5,7 @@ import { mdiUpload } from "@mdi/js";
 import { useContext, useRef } from "react";
 
 export function UploadPage() {
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [ schedule, setSchedule ] = useContext(ScheduleStateContext);
   // Pretty printed JSON
@@ -17,7 +17,7 @@ export function UploadPage() {
     }
   };
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = async (e: any) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
