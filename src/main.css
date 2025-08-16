@@ -1,0 +1,40 @@
+
+/* Apply a clean modern font to everything */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Body background and text defaults */
+body {
+  background-color: #f3f4f6; /* light gray (Tailwind's gray-100) */
+  color: #111827; /* slate-900 */
+  line-height: 1.6;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: #1f2937; /* slate-800 */
+  margin-bottom: 0.5rem;
+}
+
+/* Links */
+a {
+  color: #2563eb; /* blue-600 */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Center main content */
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}

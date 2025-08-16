@@ -17,11 +17,11 @@ const WorkOrderSchema = z.object({
   woName: z.string(),
   woMinStart: z.coerce.date().optional(),
   woMaxEnd: z.coerce.date().optional(),
-  Phases: z.array(WorkPhaseSchema),
+  phases: z.array(WorkPhaseSchema),
 })
 
 const ScheduleSchema = z.object({
-  phases: z.array(WorkOrderSchema),
+  orders: z.array(WorkOrderSchema),
 })
 
 type WorkPhase = z.infer<typeof WorkPhaseSchema>

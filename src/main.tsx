@@ -4,6 +4,8 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { OperatorPage } from "./pages/operator";
 import { WorkcenterPage } from "./pages/workcenter";
 import { UploadPage } from "./pages/upload";
+import { OuterPage } from "./components/outer_page/outer_page";
+import "./main.css"
 
 
 
@@ -31,13 +33,15 @@ import { UploadPage } from "./pages/upload";
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Navigate to={"/upload"} replace />} />
-        <Route path="/upload" element={<UploadPage/>} />
-        <Route path="/workcenter" element={<WorkcenterPage/>} />
-        <Route path="/operator" element={<OperatorPage/>} />
-        <Route path="*" element={<h1>404 page </h1>} />
-      </Routes>
+      <OuterPage>
+        <Routes>
+          <Route path="/" element={<Navigate to={"/upload"} replace />} />
+          <Route path="/upload" element={<UploadPage/>} />
+          <Route path="/workcenter" element={<WorkcenterPage/>} />
+          <Route path="/operator" element={<OperatorPage/>} />
+          <Route path="*" element={<h1>404 page </h1>} />
+        </Routes>
+      </OuterPage>
     </BrowserRouter>
 	</React.StrictMode>,
 );
