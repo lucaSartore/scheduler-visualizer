@@ -2,7 +2,6 @@ import { z } from "zod"
 
 const WorkPhaseSchema = z.object({
   phId: z.string(),
-  pdName: z.string(),
   phMinStart: z.coerce.date().optional(),
   phMinEnd: z.coerce.date().optional(),
   phScheduledStart: z.coerce.date(),
@@ -16,7 +15,6 @@ const WorkPhaseSchema = z.object({
 
 const WorkOrderSchema = z.object({
   woId: z.string(),
-  woName: z.string(),
   woMinStart: z.coerce.date().optional(),
   woMaxEnd: z.coerce.date().optional(),
   phases: z.array(WorkPhaseSchema),
@@ -24,12 +22,10 @@ const WorkOrderSchema = z.object({
 
 const WorkcenterSchema = z.object({
   wcId: z.string(),
-  wcName: z.string()
 })
 
 const OperatorSchema = z.object({
   opId: z.string(),
-  opName: z.string()
 })
 
 

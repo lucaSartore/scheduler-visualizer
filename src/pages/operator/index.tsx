@@ -5,9 +5,7 @@ import "./index.css";
 
 export function OperatorPage() {
 	useEffect(() => {
-		Highcharts.ganttChart("main-chart", {
-      // hcart 
-    });
+		Highcharts.ganttChart("main-chart", {});
 	}, []);
 
 	return (
