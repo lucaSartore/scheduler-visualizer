@@ -10,6 +10,8 @@ const WorkPhaseSchema = z.object({
   phWorkDuration: z.number(),
   phPreviousPhasesIds: z.array(z.string()),
   phWeight: z.number(),
+  wcId: z.string(),
+  opIds: z.array(z.string()),
 })
 
 const WorkOrderSchema = z.object({
@@ -20,17 +22,32 @@ const WorkOrderSchema = z.object({
   phases: z.array(WorkPhaseSchema),
 })
 
+const WorkcenterSchema = z.object({
+  wcId: z.string(),
+  wcName: z.string()
+})
+
+const OperatorSchema = z.object({
+  opId: z.string(),
+  opName: z.string()
+})
+
+
 const ScheduleSchema = z.object({
   orders: z.array(WorkOrderSchema),
+  workCenters: z.array(WorkcenterSchema).default([]),
+  operators: z.array(OperatorSchema).default([]),
 })
 
 type WorkPhase = z.infer<typeof WorkPhaseSchema>
 type WorkOrder = z.infer<typeof WorkOrderSchema>
+type Workcenter = z.infer<typeof WorkcenterSchema>
+type Operator = z.infer<typeof OperatorSchema>
 type Schedule = z.infer<typeof ScheduleSchema>
 
 function validateSchedule(input: unknown): Schedule {
   return ScheduleSchema.parse(input) // throws if invalid
 }
 
-export type {WorkOrder, WorkPhase, Schedule}
+export type {WorkOrder, WorkPhase, Workcenter, Operator, Schedule}
 export {validateSchedule}
