@@ -5,9 +5,8 @@
   justify-content: flex-start;
   gap: 2rem;
   padding: 0.75rem 1.5rem;
-  background: #1f2937; /* dark gray (tailwind slate-800 style) */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  width: 90%;
+  width: 100%;
   border-radius: 0.75rem;
 }
 
@@ -20,11 +19,11 @@
   padding: 0.5rem 1rem;
   border-radius: 0.75rem;
   transition: background 0.2s ease, transform 0.15s ease;
-  color: #f9fafb; /* text-gray-50 */
+  background: #12ca88;
 }
 
 .button-div:hover {
-  background: #374151; /* slate-700 */
+  background: #12ca88;
   transform: translateY(-2px);
 }
 
@@ -32,7 +31,6 @@
 .button-icon {
   width: 1.5rem;
   height: 1.5rem;
-  color: #60a5fa; /* blue-400 */
 }
 
 /* Button text */

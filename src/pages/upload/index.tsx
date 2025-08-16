@@ -29,7 +29,7 @@ export function UploadPage() {
       setSchedule(parsed);
     } catch (err) {
       console.error("Invalid JSON or schema validation failed:", err);
-      alert("❌ Failed to load schedule. Please upload a valid JSON file.");
+      alert("❌ Failed to load schedule. Please upload a valid JSON file. You can check the console for more details");
     }
 
     // Reset input so user can upload the same file again if needed

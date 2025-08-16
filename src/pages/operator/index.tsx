@@ -1,7 +1,18 @@
-export function OperatorPage(){
-    return (
-        <>
-          <h1>Operator page</h1>
-        </>
-    )
+import Highcharts from "highcharts/highcharts-gantt";
+import "highcharts/modules/exporting";
+import { useEffect } from "react";
+import "./index.css";
+
+export function OperatorPage() {
+	useEffect(() => {
+		Highcharts.ganttChart("main-chart", {
+      // hcart 
+    });
+	}, []);
+
+	return (
+		<>
+			<div id="main-chart"></div>
+		</>
+	);
 }
