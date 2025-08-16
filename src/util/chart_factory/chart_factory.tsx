@@ -59,14 +59,16 @@ class ChartFactory {
 			navigator: {
 				enabled: true,
         // @ts-ignore
-				liveRedraw: true
+				liveRedraw: true,
+        series: {
+          data: []
+        }
 			},
       scrollbar: {
         enabled: true
       },
       rangeSelector: {
-        enabled: true,
-        selected: 0
+        enabled: true
       },
       xAxis: {
         minRange: 7 * 24 * 3600 * 1000 // min zoom is one week
@@ -119,8 +121,23 @@ class ChartFactory {
 		return this;
 	}
 
+  addNavigatorSeries(){
+    //@ts-ignore
+    var newSerie = this.output.series!.reduce((list,series) => {
+      if (series.type != "gantt") {
+        throw Error("Got wrong series type");
+      }
+      //@ts-ignore
+      return list.concat(series.data)
+    }, []);
+
+    //@ts-ignore
+    this.output.navigator!.series.data = newSerie;
+    return this;
+  }
+
 	run() {
-		this.addDefaultStructure().addDefaultSeries().addOrders();
+		this.addDefaultStructure().addDefaultSeries().addOrders().addNavigatorSeries();
 		return this.output;
 	}
 }
