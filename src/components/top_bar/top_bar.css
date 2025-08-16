@@ -1,0 +1,56 @@
+/* Container for the top navigation bar */
+.navigation-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: #1f2937; /* dark gray (tailwind slate-800 style) */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Each clickable button */
+.button-div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease, transform 0.15s ease;
+  color: #f9fafb; /* text-gray-50 */
+}
+
+.button-div:hover {
+  background: #374151; /* slate-700 */
+  transform: translateY(-2px);
+}
+
+/* Icon inside each button */
+.button-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #60a5fa; /* blue-400 */
+}
+
+/* Button text */
+.button-text {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 640px) {
+  .navigation-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .button-div {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
