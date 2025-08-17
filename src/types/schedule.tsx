@@ -3,7 +3,7 @@ import { z } from "zod"
 const WorkPhaseSchema = z.object({
   phId: z.string(),
   phMinStart: z.coerce.date().optional(),
-  phMinEnd: z.coerce.date().optional(),
+  phMaxEnd: z.coerce.date().optional(),
   phScheduledStart: z.coerce.date(),
   phScheduledEnd: z.coerce.date(),
   phWorkDuration: z.number(),
