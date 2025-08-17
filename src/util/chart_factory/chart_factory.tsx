@@ -9,12 +9,13 @@ class ChartFactory {
 	output: Highcharts.Options;
 	kind: ChartKind;
 	orderColorAssociation: Map<string, string>;
-
-	constructor(schedule: Schedule, kind: ChartKind) {
+	readonly chart: Highcharts.GanttChart | null = null;
+	constructor(schedule: Schedule, kind: ChartKind, divName: string) {
 		this.schedule = schedule;
 		this.output = {};
 		this.kind = kind;
 		this.orderColorAssociation = new Map();
+		this.chart = this.build(divName);
 	}
 
 	_getYAxisCategories(): Array<string> {
@@ -41,6 +42,7 @@ class ChartFactory {
 		this.schedule.orders.forEach((order, i) => {
 			this.output.series!.push({
 				name: order.woId,
+				id: order.woId,
 				type: "gantt",
 				color: colors[i].hex(),
 				data: [],
@@ -58,23 +60,40 @@ class ChartFactory {
 			},
 			navigator: {
 				enabled: true,
-        // @ts-ignore
+				// @ts-ignore
 				liveRedraw: true,
-        series: {
-          data: []
-        }
+				series: {
+					data: [],
+				},
 			},
-      scrollbar: {
-        enabled: true
-      },
-      rangeSelector: {
-        enabled: true
-      },
-      xAxis: {
-        minRange: 7 * 24 * 3600 * 1000 // min zoom is one week
-      },
+			scrollbar: {
+				enabled: true,
+			},
+			rangeSelector: {
+				enabled: true,
+			},
+			xAxis: {
+				minRange: 7 * 24 * 3600 * 1000, // min zoom is one week
+			},
 			yAxis: {
 				categories: categories,
+			},
+			plotOptions: {
+				gantt: {
+					connectors: {
+						lineColor: "#00000000",
+						startMarker: {
+							enabled: false,
+						},
+            lineWidth: 2,
+            radius: 5,
+					},
+				},
+				series: {
+          // @ts-ignore
+          borderRadius: '25%',
+					events: {},
+				},
 			},
 			series: [],
 		};
@@ -89,12 +108,9 @@ class ChartFactory {
 		}
 	}
 
-  _dateToString(date: Date): string {
-    return date
-      .toISOString()
-      .replace(".000Z", "")
-      .replace("T", " ")
-  }
+	_dateToString(date: Date): string {
+		return date.toISOString().replace(".000Z", "").replace("T", " ");
+	}
 
 	addOrders() {
 		this.schedule.orders.forEach((order) => {
@@ -111,6 +127,12 @@ class ChartFactory {
 						start: this._dateToString(phase.phScheduledStart),
 						end: this._dateToString(phase.phScheduledEnd),
 						name: `${order.woId}-${phase.phId}`,
+						id: `${order.woId}-${phase.phId}`,
+						dependency: phase.phPreviousPhasesIds.map((x) => {
+							return {
+								to: `${order.woId}-${x}`,
+							};
+						}),
 						color: series.color,
 						y: this._getYAxisIndex(category),
 					});
@@ -121,25 +143,75 @@ class ChartFactory {
 		return this;
 	}
 
-  addNavigatorSeries(){
-    //@ts-ignore
-    var newSerie = this.output.series!.reduce((list,series) => {
-      if (series.type != "gantt") {
-        throw Error("Got wrong series type");
-      }
-      //@ts-ignore
-      return list.concat(series.data)
-    }, []);
+	addNavigatorSeries() {
+		//@ts-ignore
+		var newSerie = this.output.series!.reduce((list, series) => {
+			if (series.type != "gantt") {
+				throw Error("Got wrong series type");
+			}
+			//@ts-ignore
+			return list.concat(series.data);
+		}, []);
 
-    //@ts-ignore
-    this.output.navigator!.series.data = newSerie;
-    return this;
-  }
-
-	run() {
-		this.addDefaultStructure().addDefaultSeries().addOrders().addNavigatorSeries();
-		return this.output;
+		//@ts-ignore
+		this.output.navigator!.series.data = newSerie;
+		return this;
 	}
+
+	build(containerName: string) {
+		this.addDefaultStructure()
+			.addDefaultSeries()
+			.addOrders()
+			.addNavigatorSeries()
+			.addClickCallback();
+		return Highcharts.ganttChart(containerName, this.output);
+	}
+
+	setDependencyVisibility(visible: boolean) {
+		if (this.chart == null) {
+			throw new Error(
+				"Chart must have being build before this function is called",
+			);
+		}
+
+		this.chart.update({
+			plotOptions: {
+				gantt: {
+					connectors: {
+						lineColor: visible ? "#000000" : "#00000000",
+					},
+				},
+			},
+		});
+	}
+
+	addClickCallback() {
+
+    var updateSeries = (series: string, color: string) => {
+        this.chart!.update({ 
+          series: [{
+            id: series,
+            type: "gantt",
+            connectors: {
+              lineColor: color
+            }
+          }]
+        })
+      }
+
+    // change color to black when mouse over
+    this.output.plotOptions!.series!.events!.mouseOver = (event) => {
+      // @ts-ignore
+      var name = event.target!.name
+      updateSeries(name, "#000000")
+    }
+    // change color to transparent when mouse out
+    this.output.plotOptions!.series!.events!.mouseOut = (event) => {
+      // @ts-ignore
+      var name = event.target!.name
+      updateSeries(name, "#00000000")
+    }
+  }
 }
 
 export { ChartFactory };
