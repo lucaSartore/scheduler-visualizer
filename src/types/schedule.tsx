@@ -22,10 +22,12 @@ const WorkOrderSchema = z.object({
 
 const WorkcenterSchema = z.object({
   wcId: z.string(),
+  pauses: z.array(z.tuple([z.coerce.date(), z.coerce.date()]))
 })
 
 const OperatorSchema = z.object({
   opId: z.string(),
+  pauses: z.array(z.tuple([z.coerce.date(), z.coerce.date()]))
 })
 
 

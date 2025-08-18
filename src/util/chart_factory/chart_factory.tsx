@@ -120,7 +120,7 @@ class ChartFactory {
 
 					// this assertion is necessary to make ts compiler happy
 					if (series.type != "gantt") {
-						throw Error("Got wrong series type");
+						throw new Error("Got wrong series type");
 					}
 
 					series.data!.push({
@@ -147,7 +147,7 @@ class ChartFactory {
 		//@ts-ignore
 		var newSerie = this.output.series!.reduce((list, series) => {
 			if (series.type != "gantt") {
-				throw Error("Got wrong series type");
+				throw new Error("Got wrong series type");
 			}
 			//@ts-ignore
 			return list.concat(series.data);
@@ -163,7 +163,8 @@ class ChartFactory {
 			.addDefaultSeries()
 			.addOrders()
 			.addNavigatorSeries()
-			.addClickCallback();
+			.addClickCallback()
+      .addPauses();
 		return Highcharts.ganttChart(containerName, this.output);
 	}
 
@@ -184,6 +185,68 @@ class ChartFactory {
 			},
 		});
 	}
+
+  _getPeoplePauses(){
+    //Highcharts.GanttPointOptionsObject
+    var data: Array<any> = []
+
+    this.schedule.operators.forEach(op => {
+      var index = this._getYAxisIndex(op.opId)
+      op.pauses.forEach(pause => {
+        data.push({
+          start: pause[0],
+          end: pause[1],
+          y: index,
+          color: "gray"
+        })
+      })
+    })
+
+    return data
+  }
+  _getWcPauses(){
+    //Highcharts.GanttPointOptionsObject
+    var data: Array<any> = []
+
+    this.schedule.workCenters.forEach(wc => {
+      var index = this._getYAxisIndex(wc.wcId)
+      wc.pauses.forEach(pause => {
+        data.push({
+          start: this._dateToString(pause[0]),
+          end: this._dateToString(pause[1]),
+          y: index,
+          color: "gray"
+        })
+      })
+    })
+
+    return data
+  }
+  _getPauses(){
+    if (this.kind == "Operator"){
+      return this._getPeoplePauses();
+    } else {
+      return this._getWcPauses();
+    }
+  }
+
+  addPauses() {
+
+    if (!Array.isArray(this.output.series)){
+      throw Error()
+    }
+
+    this.output.series.push({
+        type: "gantt",
+        pointPadding: 0,
+        groupPadding: 0,
+        opacity: 0.6,
+        data: this._getPauses()
+    })
+
+    console.log(this.output)
+    return this
+  }
 
 	addClickCallback() {
 
@@ -211,6 +274,7 @@ class ChartFactory {
       var name = event.target!.name
       updateSeries(name, "#00000000")
     }
+    return this
   }
 }
 
