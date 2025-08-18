@@ -5,7 +5,23 @@
     <link rel="icon" type="image/svg+xml" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quindi - scheduling visualization</title>
-    <script type="module" crossorigin src="/assets/index-MQ0x-a11.js"></script>
+
+    <script type="text/javascript">
+      // just a trick to make single page app work in github-pages
+      // credit: https://github.com/rafgraph/spa-github-pages
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+
+    <script type="module" crossorigin src="/assets/index-CNQcjokc.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-Dr_P6mhl.css">
   </head>
   <body>
