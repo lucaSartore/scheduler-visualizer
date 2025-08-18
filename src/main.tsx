@@ -32,7 +32,7 @@ import "./main.css"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/scheduler-visualizer">
       <OuterPage>
         <Routes>
           <Route path="/" element={<Navigate to={"/upload"} replace />} />
