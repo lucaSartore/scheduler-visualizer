@@ -13,7 +13,9 @@ export function OperatorPage() {
 
 	return (
 		<>
-			<div id="main-chart"></div>
+      <div id="container">
+        <div id="main-chart"></div>
+      </div>
 		</>
 	);
 }
