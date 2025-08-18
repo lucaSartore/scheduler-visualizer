@@ -73,7 +73,7 @@ class ChartFactory {
 				enabled: true,
 			},
 			xAxis: {
-				minRange: 7 * 24 * 3600 * 1000, // min zoom is one week
+				minRange: 24 * 3600 * 1000, // min zoom is one day
 			},
 			yAxis: {
 				categories: categories,
