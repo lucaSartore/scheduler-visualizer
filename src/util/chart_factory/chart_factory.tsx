@@ -92,7 +92,7 @@ class ChartFactory {
 				series: {
           // @ts-ignore
           borderRadius: '25%',
-					events: {},
+					events: {}
 				},
 			},
 			series: [],
@@ -236,8 +236,10 @@ class ChartFactory {
       throw Error()
     }
 
-    this.output.series.push({
+    this.output.series.unshift({
         type: "gantt",
+        enableMouseTracking: false,
+        borderRadius: 0,
         pointPadding: 0,
         groupPadding: 0,
         opacity: 0.6,
