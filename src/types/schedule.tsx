@@ -1,11 +1,21 @@
 import { z } from "zod"
 
+
+const dateOnly = z
+  .string()
+  .transform((val) => {
+    if (!val.endsWith("Z")){
+      val = val + "Z"
+    }
+    return new Date(val)
+  });
+
 const WorkPhaseSchema = z.object({
   phId: z.string(),
-  phMinStart: z.coerce.date().optional(),
-  phMaxEnd: z.coerce.date().optional(),
-  phScheduledStart: z.coerce.date(),
-  phScheduledEnd: z.coerce.date(),
+  phMinStart: dateOnly.nullable(),
+  phMaxEnd: dateOnly.nullable(),
+  phScheduledStart: dateOnly,
+  phScheduledEnd: dateOnly,
   phWorkDuration: z.number(),
   phPreviousPhasesIds: z.array(z.string()),
   phWeight: z.number(),
@@ -15,19 +25,19 @@ const WorkPhaseSchema = z.object({
 
 const WorkOrderSchema = z.object({
   woId: z.string(),
-  woMinStart: z.coerce.date().optional(),
-  woMaxEnd: z.coerce.date().optional(),
+  woMinStart: dateOnly.nullable(),
+  woMaxEnd: dateOnly.nullable(),
   phases: z.array(WorkPhaseSchema),
 })
 
 const WorkcenterSchema = z.object({
   wcId: z.string(),
-  pauses: z.array(z.tuple([z.coerce.date(), z.coerce.date()]))
+  pauses: z.array(z.tuple([dateOnly, dateOnly]))
 })
 
 const OperatorSchema = z.object({
   opId: z.string(),
-  pauses: z.array(z.tuple([z.coerce.date(), z.coerce.date()]))
+  pauses: z.array(z.tuple([dateOnly, dateOnly]))
 })
 
 
