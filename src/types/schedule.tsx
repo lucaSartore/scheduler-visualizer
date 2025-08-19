@@ -12,8 +12,8 @@ const dateOnly = z
 
 const WorkPhaseSchema = z.object({
   phId: z.string(),
-  phMinStart: dateOnly.nullable(),
-  phMaxEnd: dateOnly.nullable(),
+  phMinStart: dateOnly.nullable().default(null),
+  phMaxEnd: dateOnly.nullable().default(null),
   phScheduledStart: dateOnly,
   phScheduledEnd: dateOnly,
   phWorkDuration: z.number(),
@@ -25,8 +25,8 @@ const WorkPhaseSchema = z.object({
 
 const WorkOrderSchema = z.object({
   woId: z.string(),
-  woMinStart: dateOnly.nullable(),
-  woMaxEnd: dateOnly.nullable(),
+  woMinStart: dateOnly.nullable().default(null),
+  woMaxEnd: dateOnly.nullable().default(null),
   phases: z.array(WorkPhaseSchema),
 })
 
