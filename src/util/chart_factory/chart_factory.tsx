@@ -8,14 +8,19 @@ class ChartFactory {
 	schedule: Schedule;
 	output: Highcharts.Options;
 	kind: ChartKind;
-	orderColorAssociation: Map<string, string>;
+	orderDeadlineAssociation: Map<string, string | undefined>;
+
 	readonly chart: Highcharts.GanttChart | null = null;
 	constructor(schedule: Schedule, kind: ChartKind, divName: string) {
 		this.schedule = schedule;
 		this.output = {};
 		this.kind = kind;
-		this.orderColorAssociation = new Map();
 		this.chart = this.build(divName);
+    this.orderDeadlineAssociation = new Map();
+
+    for (var order of this.schedule.orders){
+      this.orderDeadlineAssociation.set(order.woId, this._dateToString(order.woMaxEnd))
+    }
 	}
 
 	_getYAxisCategories(): Array<string> {
@@ -74,6 +79,10 @@ class ChartFactory {
 			},
 			xAxis: {
 				minRange: 24 * 3600 * 1000, // min zoom is one day
+        plotLines: [{
+          id: "plot_line_deadline",
+          color: "#ff000000"
+        }]
 			},
 			yAxis: {
 				categories: categories,
@@ -108,7 +117,10 @@ class ChartFactory {
 		}
 	}
 
-	_dateToString(date: Date): string {
+	_dateToString(date: Date | null): string | undefined{
+    if (date == null) {
+      return undefined;
+    }
 		return date.toISOString().replace(".000Z", "").replace("T", " ");
 	}
 
@@ -134,7 +146,7 @@ class ChartFactory {
 							};
 						}),
 						color: series.color,
-						y: this._getYAxisIndex(category),
+						y: this._getYAxisIndex(category)
 					});
 				});
 			});
@@ -252,29 +264,46 @@ class ChartFactory {
 
 	addClickCallback() {
 
-    var updateSeries = (series: string, color: string) => {
-        this.chart!.update({ 
-          series: [{
-            id: series,
-            type: "gantt",
-            connectors: {
-              lineColor: color
-            }
+    var updateChart = (series: string, connector_colors: string, deadline_color: string) => {
+      this.chart!.update({ 
+        series: [{
+          id: series,
+          type: "gantt",
+          connectors: {
+            lineColor: connector_colors
+          }
+        }],
+        xAxis: {
+          plotLines: [{
+            id: "plot_line_deadline",
+            color: deadline_color,
+            value: this.orderDeadlineAssociation.get(series)
           }]
-        })
-      }
+        }
+      })
+    }
+
+
+    // for (var i=0; i<this.output.data.se)
+
+    // change color to black when mouse over
+    this.output.plotOptions!.series!.events!.click = (event) => {
+      console.log(event)
+    }
+
 
     // change color to black when mouse over
     this.output.plotOptions!.series!.events!.mouseOver = (event) => {
+      console.log(event)
       // @ts-ignore
       var name = event.target!.name
-      updateSeries(name, "#000000")
+      updateChart(name, "#000000", "#FF000080")
     }
     // change color to transparent when mouse out
     this.output.plotOptions!.series!.events!.mouseOut = (event) => {
       // @ts-ignore
       var name = event.target!.name
-      updateSeries(name, "#00000000")
+      updateChart(name, "#00000000", "#FF000000")
     }
     return this
   }
